@@ -8,13 +8,16 @@ This area is really interesting!. But not main.
 
 ## ANN(Artificial Neural Network)
 The basic of Deep Learning.
+<br> Used for Regression and classification.
 <br>We can do anything with ANN.
 <br>Input -> hidden layer(usually (linear->relu)\*L-1) -> output layer
 
 ## CNN(Convolutional Neural Network)
-Usually applied to analyzing visual imagery.
+Used for Computer Vision
+<br>Usually applied to analyzing visual imagery.
 <br>Image -> Convolution -> Pooling -> flattening -> ANN
 
 ## RNN(Recurrent Neural Network)
-Usually applied to Natural Language Processing
+Used for time series analysis.
+<br>Usually applied to Natural Language Processing
 <br>
