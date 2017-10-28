@@ -21,8 +21,8 @@ model = Sequential()
 # Step 1 - Convolution
 # Generate feature map for given image using feature detector
 filters = 32
-img_width = 64
-img_height = 64
+img_width = 150
+img_height = 150
 img_dim = 3
 feature_detector = (3,3)
 model.add(Conv2D(filters,
@@ -85,10 +85,10 @@ test_set = test_datagen.flow_from_directory('dataset/test_set',
 # validation_data - test data
 # validation_steps - number of test set data
 model.fit_generator(training_set,
-                    steps_per_epoch = 8000,
-                    epochs = 25,
+                    steps_per_epoch = 8000/32,
+                    epochs = 100,
                     validation_data = test_set,
-                    validation_steps = 2000)
+                    validation_steps = 2000/32)
 
 # =========== Part 2 - Predict images ===========
 from keras.preprocessing import image
@@ -98,11 +98,10 @@ predict_img = image.load_img("dataset/single_prediction/cat_or_dog_1.jpg",
 X_predict = image.img_to_array(predict_img)
 X_predict = np.expand_dims(X_predict, axis=0)
 
-result = model.predict_classes(X_predict, batch_size=32, verbose=1)
+result = model.predict(X_predict)
 # Check result dog or cat
 #training_set.class_indices
 if result [0][0] == 1:
     print("Dog")
 else:
     print("Cat")
-        
