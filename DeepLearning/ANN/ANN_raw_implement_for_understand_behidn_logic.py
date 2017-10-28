@@ -50,11 +50,11 @@ def sigmoid(Z):
     cache -- returns Z as well, useful during backpropagation
     """
 
-    #A = 1/(1+np.exp(-Z))
-    #cache = Z
-
-    A = math.tanh(Z) #tanh() is batter then orignal sigmod :)
+    A = 1/(1+np.exp(-Z))
     cache = Z
+
+    #A = math.tanh(Z) #tanh() is batter then orignal sigmod :)
+    #cache = Z
 
     return A, cache
 
