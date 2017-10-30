@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+import threading, logging, time
+
+from kafka import KafkaConsumer, KafkaProducer
+
+def uniocde_conv(s):
+    if isinstance(s, unicode):
+        return str(s.encode('euc-kr'))
+    else:
+        return str(s)
+
+class Producer(threading.Thread):
+    daemon = True
+
+    def run(self):
+        producer = KafkaProducer(bootstrap_servers='localhost:9092')
+        '''
+        while True:
+            producer.send('my-topic', b"test")
+            producer.send('my-topic', b"\xc2Hola, mundo!")
+            time.sleep(1)
+        '''
+        i = 0
+        fd = open('/root/spark-2.1.0-bin-hadoop2.7/tdata/attack.log', 'r')
+        while True:
+            line = fd.readline()
+            i = i+1
+            '''
+            if not line:
+                break
+            '''
+            if i > 10:
+                break
+            producer.send('check', uniocde_conv(line))
+            producer.flush()
+
+        fd.close()
+
+
+class Consumer(threading.Thread):
+    daemon = True
+
+    def run(self):
+        consumer = KafkaConsumer(bootstrap_servers=['localhost:2181'],
+                                 auto_offset_reset='earliest')
+        consumer.subscribe(['result'])
+
+        for message in consumer:
+            print (message)
+
+
+def main():
+    threads = [
+        Producer(),
+        Consumer()
+    ]
+
+    for t in threads:
+        t.start()
+
+    time.sleep(10)
+
+if __name__ == "__main__":
+    logging.basicConfig(
+        format='%(asctime)s.%(msecs)s:%(name)s:%(thread)d:%(levelname)s:%(process)d:%(message)s',
+        level=logging.INFO
+        )
+    main()

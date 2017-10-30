@@ -20,4 +20,4 @@ Used for Computer Vision
 ## RNN(Recurrent Neural Network)
 Used for time series analysis.
 <br>Usually applied to Natural Language Processing
-<br>
+<br>Input -> Recurrent -> ANN

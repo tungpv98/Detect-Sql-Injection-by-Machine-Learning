@@ -4,7 +4,7 @@
 Created on Thu Oct 26 11:56:39 2017
 
 @author: Scott
-
+@ keras, tensorflow알기 전 고대 유물들 정리
 """
 
 import numpy as np
