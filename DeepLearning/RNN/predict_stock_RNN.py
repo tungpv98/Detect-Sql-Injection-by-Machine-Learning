@@ -4,7 +4,7 @@
 Created on Mon Oct 30 09:32:01 2017
 
 @author: Scott
-@problem: Predict stock price :D
+@problem: Predict stock price :D 
 """
 # Import librarys
 import numpy as np
@@ -18,7 +18,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # Fix random seed for reproducibility
 np.random.seed(7)
 
-# Read dataset 
+# Read dataset
 stock_dataframe = pd.read_csv('google_stock_data.csv')
 stock_data = stock_dataframe.iloc[:, 4:5].values # just use close price
 stock_data = stock_data.astype('float32')
@@ -41,7 +41,7 @@ def create_timesteps_dataset(dataset, time_steps=60):
     """
     Arguments:
     dataset -- numpy array of any shape
-    time_steps -- the number of previous time steps to use as input data to predict the next step 
+    time_steps -- the number of previous time steps to use as input data to predict the next step
 
     Returns:
     A -- numpy array of structed by time teps
@@ -51,7 +51,7 @@ def create_timesteps_dataset(dataset, time_steps=60):
         timesteps_data = dataset[i:(i+time_steps), 0]
         X_data.append(timesteps_data)
         Y_data.append(dataset[i+time_steps, 0])
-    
+
     return np.array(X_data), np.array(Y_data)
 
 time_steps=60
