@@ -16,8 +16,13 @@ The basic of Deep Learning.
 Used for Computer Vision
 <br>Usually applied to analyzing visual imagery.
 <br>Image -> Convolution -> Pooling -> flattening -> ANN
+<br>
+- **Dog and Cat Recognize**
+
 
 ## RNN(Recurrent Neural Network)
 Used for time series analysis.
 <br>Usually applied to Natural Language Processing
 <br>Input -> Recurrent -> ANN
+<br>
+- **Predict Stock price**
