@@ -5,7 +5,7 @@ Created on Wed Apr 19 17:05:40 2016
 
 @author: Scott
 """
-
+# import numpy as np
 import pandas as pd
 import os
 import math
@@ -29,8 +29,8 @@ def Sql_tokenizer(raw_sql):
 
 def GetTokenSeq(token_list, N):
     token_seq = []
-    for n in xrange(0,N):
-        token_seq += zip(*(token_list[i:] for i in xrange(n+1)))
+    for n in range(0,N):
+        token_seq += zip(*(token_list[i:] for i in range(n+1)))
     return [str(tuple) for tuple in token_seq]
 
 # G-Test Score for likelihood ratio stats
@@ -54,7 +54,10 @@ def G_test(tokens, types):
 
     # create dataset using token count values and types
     # new dataset in setted by token count, value
-    tc_dataframe = pd.DataFrame(token_cnt_table.values(), index=token_cnt_table.keys())
+    datax = []
+
+
+    tc_dataframe = pd.DataFrame(list(token_cnt_table.values()), index=token_cnt_table.keys())
     tc_dataframe.fillna(0, inplace=True)
 
     # calculate expected, g-score
@@ -75,7 +78,7 @@ def Entropy(raw_sql):
 # get g-score means of each tokens
 def G_means(token_seq, c_name):
     try:
-        g_scores = [tc_dataframe.ix[token][c_name] for token in token_seq]
+        g_scores = [tc_dataframe.loc[token][c_name] for token in token_seq]
     except KeyError:
         return 0
     return sum(g_scores)/len(g_scores) if g_scores else 0 # Average
@@ -83,7 +86,7 @@ def G_means(token_seq, c_name):
 
 
 # read data from file. You should change this path!!
-basedir = '/Users/Scott/Learn/machinelearning/StudyML/sqli/trainingdata'
+basedir = '/home/tungpv/Desktop/AT3/MachineLearning/Sql-Injection/source/trainingdata'
 filelist = os.listdir(basedir)
 df_list = []
 for file in filelist:
@@ -96,7 +99,7 @@ for file in filelist:
 # god pandas make to us a dataframe like excel format
 dataframe = pd.concat(df_list, ignore_index=True)
 dataframe.dropna(inplace=True)
-print dataframe['type'].value_counts()
+print (dataframe['type'].value_counts())
 
 # tokenize raw sql
 dataframe['sql_tokens'] = dataframe['raw_sql'].map(lambda x: Sql_tokenizer(x))
@@ -134,7 +137,7 @@ X_test = sc_X.transform(X_test)
 
 from sklearn.ensemble import GradientBoostingClassifier
 clf = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=7, random_state=0).fit(X_train, y_train)
-print "Gradient Boosting Tree Acurracy: %f" % clf.score(X_test, y_test)
+print ("Gradient Boosting Tree Acurracy: %f" % clf.score(X_test, y_test))
 
 # you can check your test data.
 def Check_is_sql(sql):
@@ -149,9 +152,14 @@ def Check_is_sql(sql):
     _X = [[len(sql_tokens), Entropy(sql), sqli_g_means, plain_g_means]]
     return clf.predict(_X)[0]
 
-check_data = '-1923 union select scott, python, machine, learning, study, version, 1--'
+# check_data = '-1923 union select scott, python, machine, learning, study, version, 1--'
+# check_data = 'day la mot doan van ban vo nghia nhe'
+check_data = "%' or '0'='0"
 res = Check_is_sql(check_data)
+print ("Chuoi kiem tra: %s" % check_data)
+print ("------------------------------")
+print ("KET QUA: ")
 if res == 1:
-    print "[SQL-Injection]: %s" % check_data
+    print ("[ĐÂY LÀ MÃ CHỨA SQL INJECTION]")
 else:
-    print "[PLAIN-TEXT]: %s" % check_data
+    print ("[ĐÂY LÀ ĐOẠN VĂN BẢN BÌNH THƯỜNG]")
